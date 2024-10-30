@@ -1,6 +1,5 @@
 import math
 import individual as individual
-# import classification_tc.genetic_net.individual as individual
 import numpy as np
 from deap import base
 from copy import deepcopy
@@ -200,64 +199,3 @@ class Evolution:
                     ind.model_params = pop[0].model_params
         print('next_generation', len(next_generation))
         return individuals, next_generation
-
-    def evolution(self, initial_pop, initial_acc, weights, toolbox):
-        pop = []
-        all_weight = []
-        for ind, ACC in zip(initial_pop, initial_acc, ):
-            ind = creator.Individual(ind, N_QUBITS)
-            ind.fitness.values = (ACC, )  # 设置适应度为 recall
-            pop.append(ind)  # creator class
-
-        # contrst_loss = queue.Queue()
-        # for N_EVO in tqdm(range(N_GENERATIONS)):
-        #     next_generation = self.select_and_evolve(pop, toolbox)[:10]  # [<deap.creator.Individual object at 0x73229b74ad60>,
-        #     for idx, individual in enumerate(next_generation):
-        #         loss, weights = train_model(individual.clayers, idx, weights)
-        #         test = train.Model(individual.clayers, test_weight=weights)
-        #         accuracy, top3_precision = test.success_rate()
-        #         print(f'num_{N_EVO}_{idx}:', accuracy, top3_precision)
-        #         contrst_loss.put((top3_precision, individual.clayers, weights))
-        #         with open(f'num_{N_EVO}_{idx}_individual.txt', 'w') as file:
-        #             file.write(str(individual.clayers))
-        #     # with concurrent.futures.ThreadPoolExecutor() as executor:
-        #     #     future_to_c_layer = {executor.submit(train_model, individual, idx, weights=None): individual for idx, individual in
-        #     #                          enumerate(next_generation)}
-        #     #     for future in concurrent.futures.as_completed(future_to_c_layer):
-        #     #         c_layer = future_to_c_layer[future]
-        #     #         try:
-        #     #             loss, weights = future.result()
-        #     #             contrst_loss.put((loss, c_layer, weights))
-        #     #         except Exception as e:
-        #     #             print(f"Exception occurred: {e}")
-        #     #     executor.shutdown()
-        #
-        #     results = []
-        #     while not contrst_loss.empty():
-        #         results.append(contrst_loss.get())
-        #     # print('results', results)
-        #     sorted_results = sorted(results, key=lambda x: x[0], reverse=True)
-        #     # print('sorted_results', sorted_results)
-        #     pop = []
-        #     all_weight = []
-        #     for loss, ind_clayer, weight in sorted_results:
-        #         ind = creator.Individual(ind_clayer, N_QUBITS)
-        #         ind.fitness.values = (loss, )
-        #         pop.append(ind)
-        #         all_weight.append(weight)
-        #     weights = sorted_results[0][2]
-    #
-        return pop, all_weight
-
-#
-# def train_model(clayer, idx, weights):
-#     Network_name = f'Network_{idx}'
-#     globals()[Network_name] = train.Model(clayer)
-#     anchor_pairs, negetives = data_load.generate_anchor()
-#     try:
-#         loss, weights = globals()[Network_name].train(dataset, anchor_pairs, negetives, idx=idx, weights=weights)
-#     except Exception as e:
-#         print(f"Exception occurred during training: {e}")
-#         loss = None
-#         weights = None
-#     return loss, weights
