@@ -24,29 +24,16 @@ def train_circuit(pop, g=None, indexs=None, n_classes=None):
     ind = pop[0]
     new_pop = []
     copy_pop = pop[1:]
-
-    # 创建量子机器学习模型实例
     quantum_model = model.QuantumMLModel(ind)
-
-    # 加载和预处理数据
     x_train, y_train, x_test, y_test = quantum_model.load_and_preprocess_data()
-
-    # 训练模型
     quantum_model.train(x_train, y_train)
-
-    # 评估模型
     loss, accuracy = quantum_model.evaluate(x_test, y_test)
-
     ind.fitness.values = [accuracy]
     ind.model_params = quantum_model.get_model_params()
     new_pop.append(ind)
-
-    # =========================================#
     for individual in copy_pop:
         new_model = model.QuantumMLModel(individual)
         original_weights = quantum_model.get_model_params()
-
-        # 将权重参数设置到新模型中
         new_model.set_model_params(original_weights)
         loss, accuracy = new_model.evaluate(x_test, y_test)
 
@@ -67,14 +54,6 @@ def train_circuit(pop, g=None, indexs=None, n_classes=None):
 
 
 def genetic_algorithm(pop, toolbox, number_of_generations, n_classes):
-    """
-    :param pop: 初始种群
-    :param toolbox: 定义遗传算法操作的工具箱，包括选择、交叉和变异等操作
-    :param number_of_generations: 遗传算法的迭代代数，即进行选择、交叉和变异操作的次数
-    :param lower_bound: 问题的描述，提供关于问题的更详细说明和背景信息
-    :param upper_bound: 问题的描述，提供关于问题的更详细说明和背景信息
-    :return: 最终种群
-    """
     new_pop = train_circuit(pop, g=0, indexs=0, n_classes=n_classes)
     pop = new_pop
 
@@ -109,16 +88,6 @@ def genetic_algorithm(pop, toolbox, number_of_generations, n_classes):
 
         except Exception as exc:
             print(f'Run generation {g}/{number_of_generations} encountered an exception: {exc}')
-            # for idx, ind in enumerate(pop):
-            #     # path = fr'/mnt/shared/CPUData/ylh_cpu/output/mnist/{N_LAYERS}_layers/{n_classes}_class/model/last_{g}_{idx}_clayers.kpl'
-            #     path = fr'/home/cpu_user_cpu/ylh_temporary/output/mnist/{N_LAYERS}_layers/{n_classes}_class/model/last_{g}_{idx}_clayers.kpl'
-            #     os.makedirs(os.path.dirname(path), exist_ok=True)
-            #
-            #     with open(path, 'wb') as clayers_file:
-            #         pickle.dump(ind.clayers, clayers_file)
-            #     params_path = fr'/home/cpu_user_cpu/ylh_temporary/output/mnist/{N_LAYERS}_layers/{n_classes}_class/model/last_{g}_{idx}_model_params.pth'
-                # params_path = fr'/mnt/shared/CPUData/ylh_cpu/output/mnist/{N_LAYERS}_layers/{n_classes}_class/model/last_{g}_{idx}_model_params.pth'
-                # torch.save(ind.model_params, params_path)
 
     return pop
 
@@ -126,10 +95,9 @@ def genetic_algorithm(pop, toolbox, number_of_generations, n_classes):
 print('n_classes', n_classes)
 toolbox = tlx.initialize_toolbox()
 EVO = ga.Evolution()
-pop = EVO.new_pop(pop_size=5)
-# first_pop = EVO.new_pop()
-# dag_pop = DAG_SELECT(first_pop)
-# pop = express(dag_pop)
+first_pop = EVO.new_pop()
+dag_pop = DAG_SELECT(first_pop)
+pop = express(dag_pop)
 start = time.perf_counter()
 try:
     pop = genetic_algorithm(pop, toolbox, number_of_generations, n_classes)
