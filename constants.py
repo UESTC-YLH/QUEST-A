@@ -1,17 +1,1 @@
-N_QUBITS = 10
-POP_SIZE = 500
-N_LAYERS = 5
-btsize = 64
-nepoch = 40
-ESL = 1.0
-cross_parents = 4
-crossover_rate = 0.3
-NUMBER_OF_GENERATIONS = 10
-SAVE_RESULT = True
-tournament_size = 3
-num_select = 1
-num_dag = 20
-num_KL = 5
-n_classes = 8
-train_pop = 5
-use_cuda = False
+
